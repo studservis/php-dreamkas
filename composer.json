@@ -1,7 +1,7 @@
 {
     "name": "studservis/php-dreamkas",
     "description": "Фискализация чека для Дримкас-Ф на php",
-    "version": "v1.0.0",
+    "version": "v1.0.1",
     "type": "library",
     "require": {
         "php": "~7.0",
