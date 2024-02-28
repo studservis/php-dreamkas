@@ -1,21 +1,22 @@
 <?php
 
-namespace DevGroup\Dreamkas\tests;
+namespace StudServis\Dreamkas\tests;
 
-use DevGroup\Dreamkas\Api;
-use DevGroup\Dreamkas\CustomerAttributes;
-use DevGroup\Dreamkas\exceptions\ValidationException;
-use DevGroup\Dreamkas\Payment;
-use DevGroup\Dreamkas\Position;
-use DevGroup\Dreamkas\Receipt;
-use DevGroup\Dreamkas\TaxMode;
+use PHPUnit\Framework\TestCase;
+use StudServis\Dreamkas\Api;
+use StudServis\Dreamkas\CustomerAttributes;
+use StudServis\Dreamkas\exceptions\ValidationException;
+use StudServis\Dreamkas\Payment;
+use StudServis\Dreamkas\Position;
+use StudServis\Dreamkas\Receipt;
+use StudServis\Dreamkas\TaxMode;
 use GuzzleHttp\Exception\ClientException;
 
 
 /**
  * Class ApiTest
  */
-class ApiTest extends \PHPUnit_Framework_TestCase
+class ApiTest extends TestCase
 {
 
     public function testJson()

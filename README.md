@@ -1,5 +1,5 @@
 # php-dreamkas
-Фискализация чека для Дримкас-Ф для PHP 7.0
+Фискализация чека для Дримкас-Ф для PHP 7.4
 
 Для более старых версий PHP придётся править код на предмет типов у функций.
 
@@ -13,13 +13,13 @@ composer require studservis/php-dreamkas
 
 ```php
 <?php
-use StudServise\Dreamkas\Api;
-use StudServise\Dreamkas\CustomerAttributes;
-use StudServise\Dreamkas\exceptions\ValidationException;
-use StudServise\Dreamkas\Payment;
-use StudServise\Dreamkas\Position;
-use StudServise\Dreamkas\Receipt;
-use StudServise\Dreamkas\TaxMode;
+use StudServis\Dreamkas\Api;
+use StudServis\Dreamkas\CustomerAttributes;
+use StudServis\Dreamkas\exceptions\ValidationException;
+use StudServis\Dreamkas\Payment;
+use StudServis\Dreamkas\Position;
+use StudServis\Dreamkas\Receipt;
+use StudServis\Dreamkas\TaxMode;
 use GuzzleHttp\Exception\ClientException;
 
 /***

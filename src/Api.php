@@ -1,8 +1,11 @@
 <?php
 
-namespace StudServise\Dreamkas;
+namespace StudServis\Dreamkas;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Utils;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Api
@@ -50,23 +53,23 @@ class Api
         $this->client = new Client([
             'base_uri' => $baseUri,
         ]);
-
-
     }
 
     /**
      * @param string $method
      * @param string $uri
      * @param array $options
-     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
+     * @throws GuzzleException
      */
-    public function request(string $method, string $uri = '', array $options = [])
+    public function request(string $method, string $uri = '', array $options = []): ResponseInterface
     {
         if (isset($options['headers']) === false) {
             $options['headers'] = [];
         }
         $options['headers']['Authorization'] = 'Bearer ' . $this->accessToken;
         $options['headers']['Accept'] = 'application/json';
+
         return $this->client->request($method, $uri, $options);
     }
 
@@ -75,24 +78,26 @@ class Api
      * @param string $uri
      * @param array $options
      * @return mixed
+     * @throws GuzzleException
      */
     public function json(string $method, string $uri = '', array $options = [])
     {
-
         $response = $this->request($method, $uri, $options);
-        return \GuzzleHttp\json_decode($response->getBody(), true);
+
+        return Utils::jsonDecode($response->getBody(), true);
     }
 
     /**
      * @param Receipt $receipt
      * @return mixed
-     * @throws exceptions\ValidationException
+     * @throws exceptions\ValidationException|GuzzleException
      */
     public function postReceipt(Receipt $receipt)
     {
         $receipt->validate();
         $data = $receipt->toArray();
         $data['deviceId'] = $this->deviceId;
+
         return $this->json('POST', 'receipts', [
             'json' => $data,
         ]);
