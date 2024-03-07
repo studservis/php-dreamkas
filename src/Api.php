@@ -1,65 +1,35 @@
 <?php
 
-namespace StudServise\Dreamkas;
+namespace StudServis\Dreamkas;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Api
  */
 class Api
 {
-    const MODE_PRODUCTION = 0;
-    const MODE_MOCK = 1;
-    const MODE_DEBUG = 2;
 
     public $accessToken = '';
-    public $deviceId = 0;
-    public $mode = self::MODE_PRODUCTION;
+    public $deviceId    = 0;
 
     /** @var Client */
     protected $client;
 
-    protected static $baseUri = [
-        self::MODE_PRODUCTION => 'https://kabinet.dreamkas.ru/api/',
-        self::MODE_MOCK => 'https://private-anon-2a1e26f7f7-kabinet.apiary-mock.com/api/',
-        self::MODE_DEBUG => 'https://private-anon-2a1e26f7f7-kabinet.apiary-proxy.com/api/',
-    ];
+    //@TODO: up php version and set const to public
+    const PRODUCTION_URL = 'https://kabinet.dreamkas.ru/api/';
 
-    /**
-     * Api constructor.
-     * @param string $accessToken
-     * @param int $deviceId
-     * @param int $mode
-     */
-    public function __construct(string $accessToken, int $deviceId, int $mode = self::MODE_PRODUCTION)
+    public function __construct(string $accessToken, int $deviceId, ClientInterface $client)
     {
         $this->accessToken = $accessToken;
         $this->deviceId = $deviceId;
-        $this->mode = $mode;
-        $this->createClient();
+        $this->client = $client;
     }
 
-    protected function createClient()
-    {
-        $baseUri = static::$baseUri[$this->mode] ?? null;
-        if ($baseUri === null) {
-            throw new \RuntimeException('Unknown Dreamkas Api mode');
-        }
 
-        $this->client = new Client([
-            'base_uri' => $baseUri,
-        ]);
-
-
-    }
-
-    /**
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     * @return mixed|\Psr\Http\Message\ResponseInterface
-     */
     public function request(string $method, string $uri = '', array $options = [])
     {
         if (isset($options['headers']) === false) {
@@ -70,12 +40,6 @@ class Api
         return $this->client->request($method, $uri, $options);
     }
 
-    /**
-     * @param string $method
-     * @param string $uri
-     * @param array $options
-     * @return mixed
-     */
     public function json(string $method, string $uri = '', array $options = [])
     {
 
@@ -83,11 +47,6 @@ class Api
         return \GuzzleHttp\json_decode($response->getBody(), true);
     }
 
-    /**
-     * @param Receipt $receipt
-     * @return mixed
-     * @throws exceptions\ValidationException
-     */
     public function postReceipt(Receipt $receipt)
     {
         $receipt->validate();

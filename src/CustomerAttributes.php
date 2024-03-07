@@ -1,9 +1,9 @@
 <?php
 
-namespace StudServise\Dreamkas;
+namespace StudServis\Dreamkas;
 
 
-use StudServise\Dreamkas\exceptions\ValidationException;
+use StudServis\Dreamkas\exceptions\ValidationException;
 
 /**
  * Class CustomerAttributes описывает информацию о покупателе, куда ему высылать чек

@@ -13,21 +13,27 @@ composer require studservis/php-dreamkas
 
 ```php
 <?php
-use StudServise\Dreamkas\Api;
-use StudServise\Dreamkas\CustomerAttributes;
-use StudServise\Dreamkas\exceptions\ValidationException;
-use StudServise\Dreamkas\Payment;
-use StudServise\Dreamkas\Position;
-use StudServise\Dreamkas\Receipt;
-use StudServise\Dreamkas\TaxMode;
+use StudServis\Dreamkas\Api;
+use StudServis\Dreamkas\CustomerAttributes;
+use StudServis\Dreamkas\exceptions\ValidationException;
+use StudServis\Dreamkas\Payment;
+use StudServis\Dreamkas\Position;
+use StudServis\Dreamkas\Receipt;
+use StudServis\Dreamkas\TaxMode;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Client;
 
-/***
- * 123 - ID кассы
- * MODE_MOCK - режим, может быть MODE_MOCK, MODE_PRODUCTION, MODE_MODE_DEBUG
+/**
+ * $accessToken - ACCESS_TOKEN из профиля
+ * $deviceId - ID кассы
  */
-$api = new Api('ACCESS_TOKEN из профиля', 123, Api::MODE_MOCK);
-
+$api = new Api(
+    $accessToken,
+    $deviceId,
+    new Client([
+        'base_uri' => Api::PRODUCTION_URL,
+    ])
+);
 $receipt = new Receipt();
 $receipt->taxMode = TaxMode::MODE_SIMPLE;
 $receipt->positions[] = new Position([

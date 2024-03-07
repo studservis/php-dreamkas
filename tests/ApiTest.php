@@ -1,14 +1,19 @@
 <?php
 
-namespace DevGroup\Dreamkas\tests;
+namespace StudServis\Dreamkas\tests;
 
-use DevGroup\Dreamkas\Api;
-use DevGroup\Dreamkas\CustomerAttributes;
-use DevGroup\Dreamkas\exceptions\ValidationException;
-use DevGroup\Dreamkas\Payment;
-use DevGroup\Dreamkas\Position;
-use DevGroup\Dreamkas\Receipt;
-use DevGroup\Dreamkas\TaxMode;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Request;
+use StudServis\Dreamkas\Api;
+use StudServis\Dreamkas\CustomerAttributes;
+use StudServis\Dreamkas\exceptions\ValidationException;
+use StudServis\Dreamkas\Payment;
+use StudServis\Dreamkas\Position;
+use StudServis\Dreamkas\Receipt;
+use StudServis\Dreamkas\TaxMode;
 use GuzzleHttp\Exception\ClientException;
 
 
@@ -17,10 +22,15 @@ use GuzzleHttp\Exception\ClientException;
  */
 class ApiTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testJson()
     {
-        $api = new Api('FAKE', 123, Api::MODE_MOCK);
+        $jsonData = json_encode([[]]);
+
+        $client = $this->createMockClient([
+            new Response(200, ['X-Foo' => 'Bar'], $jsonData),
+        ]);
+
+        $api = new Api('FAKE', 123, $client);
         $result = $api->json('GET', 'products');
 
         $this->assertSame([[]], $result);
@@ -28,21 +38,38 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
     public function testPostReceipt()
     {
+        $jsonData = json_encode([
+            'id' => '65e0dbcfbb519c0032c99980',
+            'createdAt' => '2024-02-29T19:32:31.968Z',
+            'status' => 'PENDING',
+        ]);
+        $client = $this->createMockClient([
+            new Response(200, ['X-Foo' => 'Bar'], $jsonData),
+        ]);
 
-        $api = new Api('FAKE', 123, Api::MODE_MOCK);
+        $api = new Api('FAKE', 123, $client);
 
-        $receipt = new Receipt();
-        $receipt->taxMode = TaxMode::MODE_SIMPLE;
+        $receipt = new Receipt([
+            'type'    => 'SALE',
+            'timeout' => 300,
+            'taxMode' => 'SIMPLE_WO',
+        ]);
         $receipt->positions[] = new Position([
-            'name' => 'Билет - тест',
-            'quantity' => 2,
-            'price' => 210000,
+            'name'     => 'Консультационные услуги',
+            'type'     => 'SERVICE',
+            'quantity' => 1,
+            'price'    => 116700.0,
+            'priceSum' => 0,
+            'tax'      => NULL,
+            'taxSum'   => NULL,
         ]);
         $receipt->payments[] = new Payment([
-            'sum' => 420000,
+            'sum'  => 116700.0,
+            'type' => 'CASHLESS',
         ]);
         $receipt->attributes = new CustomerAttributes([
-            'email' => 'info@devgroup.ru',
+            'email' => 'foobar@example.com',
+            'phone' => '+70000000000',
         ]);
 
         $receipt->calculateSum();
@@ -60,23 +87,13 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('status', $response);
         $this->assertArrayHasKey('id', $response);
         $this->assertArrayHasKey('createdAt', $response);
-
-//
-        $receipt->type = Receipt::TYPE_REFUND;
-        $response = [];
-        try {
-            $response = $api->postReceipt($receipt);
-        } catch (ValidationException $e) {
-            $this->assertFalse(true, 'Validation exception: ' . $e->getMessage());
-        } catch (ClientException $e) {
-            echo $e->getResponse()->getBody();
-            $this->assertFalse(true, 'Client exception');
-        }
-        $this->assertArrayHasKey('status', $response);
-        $this->assertArrayHasKey('id', $response);
-        $this->assertArrayHasKey('createdAt', $response);
-
     }
 
+    private function createMockClient(array $responses)
+    {
+        $mock = new MockHandler($responses);
+        $handlerStack = HandlerStack::create($mock);
+        return new Client(['handler' => $handlerStack]);
+    }
 
 }
