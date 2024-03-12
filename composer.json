@@ -4,11 +4,11 @@
     "type": "library",
     "require": {
         "php": "~7.0",
-        "guzzlehttp/guzzle": "~6.3.0"
+        "guzzlehttp/guzzle": "^7.8"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.7.25",
-        "ext-json": "*"
+        "ext-json": "*",
+        "phpunit/phpunit": "~5.7.25"
     },
     "license": "MIT",
     "autoload": {

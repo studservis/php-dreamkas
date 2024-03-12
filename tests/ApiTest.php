@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 use StudServis\Dreamkas\Api;
 use StudServis\Dreamkas\CustomerAttributes;
 use StudServis\Dreamkas\exceptions\ValidationException;
@@ -19,7 +20,7 @@ use StudServis\Dreamkas\TaxMode;
 /**
  * Class ApiTest
  */
-class ApiTest extends \PHPUnit_Framework_TestCase
+class ApiTest extends TestCase
 {
 
     public function testJson()
