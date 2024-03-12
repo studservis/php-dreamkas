@@ -45,15 +45,14 @@ $receipt->payments[] = new Payment([
     'sum' => 420000, // стоимость оплаты по чеку
 ]);
 $receipt->attributes = new CustomerAttributes([
-    'email' => 'info@devgroup.ru', // почта покупателя
-    'phone' => '74996776566', // телефон покупателя
+    'email' => 'foobar@example.com', // почта покупателя
+    'phone' => '+70000000000', // телефон покупателя
 ]);
 
 // Можно посчитать сумму автоматом
 // $receipt->calculateSum();
 // А можно завалидировать чек
 // $receipt->validate();
-
 
 $response = [];
 try {

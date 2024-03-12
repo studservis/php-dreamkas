@@ -4,8 +4,6 @@ namespace StudServis\Dreamkas;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Api

@@ -6,15 +6,14 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
 use StudServis\Dreamkas\Api;
 use StudServis\Dreamkas\CustomerAttributes;
 use StudServis\Dreamkas\exceptions\ValidationException;
 use StudServis\Dreamkas\Payment;
 use StudServis\Dreamkas\Position;
 use StudServis\Dreamkas\Receipt;
-use StudServis\Dreamkas\TaxMode;
 use GuzzleHttp\Exception\ClientException;
+use StudServis\Dreamkas\TaxMode;
 
 
 /**
@@ -52,7 +51,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $receipt = new Receipt([
             'type'    => 'SALE',
             'timeout' => 300,
-            'taxMode' => 'SIMPLE_WO',
+            'taxMode' => TaxMode::MODE_SIMPLE_WO,
         ]);
         $receipt->positions[] = new Position([
             'name'     => 'Консультационные услуги',
