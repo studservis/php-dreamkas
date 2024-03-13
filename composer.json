@@ -8,7 +8,7 @@
     },
     "require-dev": {
         "ext-json": "*",
-        "phpunit/phpunit": "~5.7.25"
+        "phpunit/phpunit": "^9.6"
     },
     "license": "MIT",
     "autoload": {
