@@ -87,7 +87,34 @@ class ApiTest extends TestCase
             $this->assertFalse(true, 'Client exception');
         }
 
-        $recipeJson = '{"type":"SALE","timeout":300,"taxMode":"SIMPLE_WO","positions":[{"name":"\u041a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0435 \u0443\u0441\u043b\u0443\u0433\u0438","type":"SERVICE","quantity":1,"price":116700,"priceSum":116700}],"payments":[{"sum":116700,"type":"CASHLESS"}],"attributes":{"email":"foobar@example.com","phone":"+70000000000"},"total":{"priceSum":116700},"deviceId":123}';
+        $recipeJson = '{
+            "type":"SALE",
+            "timeout":300,
+            "taxMode":"SIMPLE_WO",
+            "positions":[
+                {
+                    "name":"\u041a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0435 \u0443\u0441\u043b\u0443\u0433\u0438",
+                    "type":"SERVICE",
+                    "quantity":1,
+                    "price":116700,
+                    "priceSum":116700
+                }
+            ],
+            "payments":[
+                {
+                    "sum":116700,
+                    "type":"CASHLESS"
+                }
+            ],
+            "attributes":{
+                "email":"foobar@example.com",
+                "phone":"+70000000000"
+            },
+            "total":{
+                "priceSum":116700
+            },
+            "deviceId":123
+        }';
 
         $this->assertArrayHasKey('status', $response);
         $this->assertArrayHasKey('id', $response);
