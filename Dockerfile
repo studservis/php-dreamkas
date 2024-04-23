@@ -1,8 +1,18 @@
-FROM php:7.4-cli
-RUN apt-get update -yqq
-RUN apt-get install -yqq git libmcrypt-dev libpq-dev libcurl4-gnutls-dev libicu-dev libvpx-dev libjpeg-dev libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev libxml2-dev libexpat1-dev libbz2-dev libgmp3-dev libldap2-dev unixodbc-dev libsqlite3-dev libaspell-dev libsnmp-dev libpcre3-dev libtidy-dev
-# Install PHP extensions
-RUN docker-php-ext-install curl json opcache
-COPY ./ /var/www/html/
-WORKDIR /var/www/html/
+FROM php:8.1-cli
+
+RUN apt-get update -y \
+    && apt-get install -y \
+    zip
+
+RUN pecl channel-update pecl.php.net \
+    && pecl install xdebug-3.1.6 \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# trigger all errors in dev env
+RUN echo "error_reporting = E_ALL" >> $PHP_INI_DIR/php.ini
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/
 
