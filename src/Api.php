@@ -4,6 +4,7 @@ namespace StudServis\Dreamkas;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Utils;
 
 /**
  * Class Api
@@ -42,7 +43,7 @@ class Api
     {
 
         $response = $this->request($method, $uri, $options);
-        return \GuzzleHttp\json_decode($response->getBody(), true);
+        return Utils::jsonDecode($response->getBody(), true);
     }
 
     public function postReceipt(Receipt $receipt)
