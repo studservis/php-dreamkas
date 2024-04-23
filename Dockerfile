@@ -6,10 +6,5 @@ RUN apt-get update -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install PHP extensions
-#RUN docker-php-ext-install json
-
-COPY ./ /var/www/
-
 WORKDIR /var/www/
 
